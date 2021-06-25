@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import { useState } from "react";
+import Axios from "axios";
+export default function App() {
+  const [foodName, setFoodName] = useState("");
+  const [days, setDays] = useState("");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    Axios.post("http://localhost:3001/insert", {
+      foodName: foodName,
+      days: days,
+    });
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>MERN CRUD</h1>
+      <label htmlFor="foodName">FoodName:</label>
+      <input
+        type="text"
+        id="foodName"
+        value={foodName}
+        onChange={(e) => setFoodName(e.target.value)}
+      />
+      <label htmlFor="days">Days Since you ate it:</label>
+      <input
+        type="number"
+        id="days"
+        value={days}
+        onChange={(e) => {
+          setDays(e.target.value);
+        }}
+      />
+      <button className="btn btn-large btn-primary" onClick={handleSubmit}>
+        Add to list
+      </button>
     </div>
   );
 }
-
-export default App;
