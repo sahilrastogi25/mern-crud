@@ -22,7 +22,6 @@ app.post("/insert", async (req, res) => {
     console.error(err);
   }
 });
-
 app.get("/read", (req, res) => {
   Foodmodel.find({}, (err, result) => {
     if (err) {
@@ -32,7 +31,25 @@ app.get("/read", (req, res) => {
     }
   });
 });
+app.put("/update", async (req, res) => {
+  const newFoodName = req.body.newFoodName;
+  const id = req.body.id;
+  try {
+    await Foodmodel.findById(id, (err, updatedFood) => {
+      updatedFood.foodName = newFoodName;
+      updatedFood.save();
+      res.send("updated");
+    });
+  } catch (err) {
+    console.error(err);
+  }
+});
 
+app.delete("/delete/:id", async (req, res) => {
+  const id = req.params.id;
+  await Foodmodel.findByIdAndDelete(id);
+  res.send("deleted");
+});
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
