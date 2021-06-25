@@ -6,7 +6,6 @@ const Foodmodel = require("./models/Food");
 const PORT = 3001;
 app.use(cors());
 app.use(express.json());
-
 mongoose.connect(
   "mongodb+srv://sahil:test1234@crud.ylkhg.mongodb.net/food?retryWrites=true&w=majority",
   { useNewUrlParser: true, useUnifiedTopology: true }
@@ -18,12 +17,22 @@ app.post("/insert", async (req, res) => {
   const food = new Foodmodel({ foodName: foodName, daysSinceIAte: days });
   try {
     await food.save();
-    console.log("Added data");
     res.send("Inserted data!");
   } catch (err) {
     console.error(err);
   }
 });
+
+app.get("/read", (req, res) => {
+  Foodmodel.find({}, (err, result) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
