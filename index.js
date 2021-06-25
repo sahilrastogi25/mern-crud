@@ -1,8 +1,10 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
 const Foodmodel = require("./models/Food");
 const PORT = 3001;
+app.use(cors());
 app.use(express.json());
 
 mongoose.connect(
@@ -10,10 +12,13 @@ mongoose.connect(
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
-app.get("/", (req, res) => {
-  const food = new Foodmodel({ foodName: "Papaya", daysSinceIAte: 10 });
+app.post("/insert", async (req, res) => {
+  const foodName = req.body.foodName;
+  const days = req.body.days;
+  const food = new Foodmodel({ foodName: foodName, daysSinceIAte: days });
   try {
-    food.save();
+    await food.save();
+    console.log("Added data");
     res.send("Inserted data!");
   } catch (err) {
     console.error(err);
